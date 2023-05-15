@@ -6,7 +6,6 @@ int N;
 int M;
 
 int main(int argc, char *argv[]) {
-
     auto start = std::chrono::system_clock::now();
 
     vector<link> links = leerArchivo(argv[1]);
@@ -17,14 +16,12 @@ int main(int argc, char *argv[]) {
     vector<double> e = vector<double>(N, 1);
     Matriz I = Matriz::identidad(N);
     Matriz coefs = I - W * D * p;
-
     vector<double> x = eliminacionGausseana(coefs, e, N);
     vector<double> xNormalizado = normalizar(x);
 
     imprimirResultado(p, xNormalizado, argv[1]);
 
     auto end = std::chrono::system_clock::now();
-
     cout << (end - start).count() << endl;
     return 0;
 }

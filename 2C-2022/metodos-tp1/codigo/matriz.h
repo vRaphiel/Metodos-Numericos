@@ -3,15 +3,12 @@
 
 #include <map>
 #include <vector>
-#include <string>
 
 using namespace std;
 
 struct Matriz {
 
     Matriz(int tam);
-
-    Matriz(int dim, vector<double> &a, vector<int> &ja, vector<int> &ia);
 
     int dimension;
 
@@ -34,9 +31,10 @@ struct Matriz {
         return I;
     }
 
-    vector<int> IA = vector<int>();
+private:
     vector<double> A = vector<double>();
     vector<int> JA = vector<int>();
+    vector<int> IA = vector<int>();
 };
 
 bool esCero(double);

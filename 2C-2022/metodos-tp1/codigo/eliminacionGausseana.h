@@ -2,7 +2,6 @@
 #define CODIGO_ELIMINACIONGAUSSEANA_H
 
 #include "matriz.h"
-#include "matrizdok.h"
 #include <vector>
 using namespace std;
 

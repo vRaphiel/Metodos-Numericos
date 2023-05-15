@@ -11,13 +11,6 @@ Matriz::Matriz(int tam) {
     IA = vector<int>(dimension + 1, 0);
 }
 
-Matriz::Matriz(int dim, vector<double> &a, vector<int> &ja, vector<int> &ia) {
-    dimension = dim;
-    A = a;
-    JA = ja;
-    IA = ia;
-}
-
 double Matriz::at(int fila, int columna) const {
     int l = IA[fila];
     int r = IA[fila + 1] - 1;
