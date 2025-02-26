@@ -1,0 +1,10 @@
+*.aux
+*.log
+*.out
+*.toc
+*.synctex.gz
+*.fls
+*.blg
+*.fdb_latexmk
+*.bbl
+svg-inkscape

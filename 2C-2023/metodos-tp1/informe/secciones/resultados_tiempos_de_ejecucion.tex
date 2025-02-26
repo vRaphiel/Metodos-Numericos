@@ -1,0 +1,93 @@
+Al trabajar en una computadora, tenemos un problema de límite de dígitos para representación de números, especialmente si trabajamos con números muy chicos ya que tenemos problemas al momento de realizar operaciones entre ellos.
+Un ejemplo de ello es que ciertos números muy cercanos al 0, si bien son distintos de 0, su representación en una computadora hace que dicho valor sea representado como 0 y operaciones como la división pueden terminar indefinidas.
+Es por tal motivo que se agregó un valor límite, un $\epsilon$ cercano a 0 que se utilizará para medir este riesgo. Dado un $r$ suficientemente chico, si este se encuentra en el intervalo $-\epsilon < r < \epsilon$, asumimos que el número puede afectar las operaciones a realizar.
+Ante esta presencia realizamos una advertencia para saber si nos estamos acercando a valores muy chicos y así poder tomar decisiones sobre nuestras matrices de prueba.
+
+Dicho esto, continuaremos con los experimentos para los distintos algoritmos.
+Se realizaron comparaciones entre los algoritmos de las siguientes dos maneras:
+\begin{itemize}
+   \item Eliminación Gaussiana con Pivoteo (tradicional) y Algoritmo Tridiagonal
+   \item Algoritmo tridiagonal y Algoritmo tridiagonal con precómputo
+\end{itemize}
+
+Se realizaron pruebas con 3 distintos tipos de matrices:
+\begin{itemize}
+   \item Random Inversible
+   \item Estrictamente Diagonal Dominante
+   \item Simétrica Definida Positiva
+\end{itemize}
+
+El porque se usan estas matrices deriva en los siguientes puntos:
+Las matrices random se escogieron para probar la efectividad de los algoritmos en tiempos de términos de ejecución ya que, al ser arbitrarias, no podemos asegurar que estas tengan alguna estructura que brinde ventaja sobre otras de las matrices aleatorias en las pruebas. A demás, para la ejecución, se aseguró de que a todas las matrices con las que se prueba, se les pudiera aplicar la eliminación gausseana.
+
+Las matrices Estrictamente Diagonal Dominantes cumplen con la propiedad de que, sea A una matriz EDD, $|a_{ii}| > \sum_{j = 1, j \neq i}^n |a_{ij}| \forall i=1\dots n$. Teniendo esto presente y desarrollando los pasos, se obtiene que para el i-ésimo paso, el valor de la diagonal no solo no se anulará, si no que será el máximo en esa iteración provocando así que no haya una necesidad de realizar un pivoteo de la misma, por lo cual se puede seguir aplicando correctamente el algoritmo, ahorrando así un tiempo de ejecución considerable.
+
+Para finalizar, la matriz SDP por una de sus propiedades, se tiene que $A_{ii} > 0 \forall i=1\dots n$. 
+Por lo cual, la diagonal no es nula y se puede aplicar el i-ésimo paso de la Eliminación Gaussiana. A su vez, por ser una matriz SDP, esta tiene factorización de Cholesky la cual parte de una factorización LU y por lo tanto, se puede aplicar la Eliminación Gausseana.
+
+Para la comparación entre los algoritmos de Eliminación Gaussiana con Pivoteo y Algoritmo Tridiagonal se construyeron múltiples matrices de distintos tamaños acompañados de sus términos independientes (recordar la forma del sistema: $Ax = b$).
+Para cada instancia se ejecutó el algoritmo múltiples veces tomando el mínimo tiempo de ejecución en cada una y se construyeron los gráficos de comparación.
+
+La hipótesis respecto de estos algoritmos es que el Algoritmo Tridiagonal se ejecutará mucho más rápido que el algoritmo de Eliminación Gaussiana con pivoteo. Esto ha de deberse a que mientras en el segundo caso se opera sobre la matriz completa (incluyendo la gran cantidad de elementos nulos), en el primero se opera únicamente sobre las tres diagonales de valores no nulos.
+
+Los resultados son los siguientes:
+
+\begin{figure}[H]
+   \centering
+   \includesvg[scale=0.4]{graficos/4a-pivot-tridg-random.svg}
+   \caption{Comparativa EG con Pivot y Tridiagonal. Matrices Random}
+   \label{fig:4b-tridg-pre-random-1}
+\end{figure}
+
+
+Se puede ver en la figura \ref{fig:4b-tridg-pre-random-1} como, efectivamente, la hipótesis se cumple siendo el algoritmo tridiagonal el que mantiene un tiempo de ejecución casi constante mientras que el algoritmo de Eliminación Gaussiana crece de forma cuadrática sobre el tamaño de la matriz. En la figura \ref{fig:fig_con_sin_pre-1} se observa que el tipo de matriz no cambia significativamente ni el tiempo total de cada algoritmo, ni la la comparación de tiempos entre ellos.
+
+\begin{figure}[H]
+   \begin{subfigure}{.5\textwidth}
+      \centering
+      \includesvg[scale=0.4]{graficos/4a-pivot-tridg-edd.svg}
+      \caption{Ejecución de EDD}
+      \label{fig:4b-tridg-pre-edd-1}
+   \end{subfigure}%
+   \begin{subfigure}{.5\textwidth}
+      \centering
+      \includesvg[scale=0.4]{graficos/4a-pivot-tridg-sdp.svg}
+      \caption{Ejecución de SDP}
+      \label{fig:4b-tridg-pre-sdp-1}
+   \end{subfigure}
+   \caption{Ejecución SDP}
+   \label{fig:fig_con_sin_pre-1}
+\end{figure}
+
+Para la comparación de los algoritmos tridiagonal (algoritmo \ref{alg:gauss-tridiagonal}) y tridiagonal con precómputo (algoritmo \ref{alg:gauss-tridiagonal-con-precomputo}) se construyó una matriz aleatoria inversible $A$ de tamaño $5000$x$5000$ y $1000$ vectores de términos independientes $d$, utilizada para observar cuál es la diferencia de tiempo entre uno y otro.
+La hipótesis sobre este experimentoes que, si bien ambos algoritmos son $\mathcal{O}(n)$, el que no utiliza precómputo debe triangular la matriz en cada ocasión mientras que el otro sólo debe realizarlo una vez.
+Esto debería resultar en una leve diferencia entre el crecimiento de una y otra en términos de tiempo.
+
+\begin{figure}[H]
+   \centering
+   \includesvg[scale=0.4]{graficos/4b-tridg-sincon-pre-random}
+   \caption{Comparativa entre algoritmo con y sin precomputo. Matrices Random}
+   \label{fig:4b-tridg-pre-random-2}
+\end{figure}
+
+Se puede observar claramente en la figura \ref{fig:4b-tridg-pre-random-2} cómo el algoritmo que utiliza precómputo muestra tiempos de ejecución notablemente menores con respecto al algoritmo que no utiliza precómputo, y cómo ambos crecen de manera lineal. Por lo tanto, la hipótesis se cumple.
+
+\begin{figure}[H]
+   \begin{subfigure}{.5\textwidth}
+      \centering
+      \includesvg[scale=0.4]{graficos/4b-tridg-sincon-pre-EDD}
+      \caption{Ejecución de EDD}
+      \label{fig:4b-tridg-pre-edd-2}
+   \end{subfigure}%
+   \begin{subfigure}{.5\textwidth}
+      \centering
+      \includesvg[scale=0.4]{graficos/4b-tridg-sincon-pre-SDP}
+      \caption{Ejecución de SDP}
+      \label{fig:4b-tridg-pre-sdp-2}
+   \end{subfigure}
+   \caption{Ejecución SDP}
+   \label{fig:fig_con_sin_pre-2}
+\end{figure}
+
+Con respecto a los otros dos tipos de matrices (estrictamente diagonal dominante y simétrica definida positiva, figura \ref{fig:fig_con_sin_pre-2}), en ambos  casos se observan resultados similares a los de la figura anterior. Esto se traduce en que el tipo de matriz no afectaría significativamente el tiempo de ejecución de los algoritmos.
+Si bien el método con precómputo ejecuta más rápido, ambos crecen de manera lineal y por ende, todo depende del tamaño de la matriz más que del tipo de esta para estos experimentos.

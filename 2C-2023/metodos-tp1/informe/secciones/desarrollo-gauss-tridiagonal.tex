@@ -1,0 +1,94 @@
+Cuando la matriz asociada al sistema a resolver es tridiagonal, dadas las características de dichas matrices, en cada paso de Eliminación Gaussiana sólo se debe anular el elemento inmediatamente debajo de la diagonal principal, dado que el resto de los elementos debajo de la misma son nulos. Esto puede aprovecharse para reducir significativamente la cantidad de operaciones a realizar.
+
+En el ejemplo de la sección \ref{intro_sistemas_tridiagonales} se observa claramente cómo en el paso 1 de Eliminación Gaussiana sólo debe anularse el elemento $a_{2}$ (asumiendo $b_{1} \neq 0$). Lo mismo ocurre en los pasos siguientes. Esto resulta en que el vector $a$, finalizada la ejecución del algoritmo, termine siendo el vector nulo.
+
+En el mismo ejemplo puede también observarse que los elementos inmediatamente superiores a la diagonal principal (vector $c$) no resultan afectados por los pasos de Eliminación Gaussiana, dado que los elementos superiores de su misma columna son nulos, lo que implica que en cada paso se les reste (o sume) cero.
+
+Por lo tanto, en el $i$-ésimo paso de Eliminación Gaussiana sobre una matriz tridiagonal extendida, sólo deben calcularse los nuevos valores de $b_{i+1}$ y $d_{i+1}$, restándoles el elemento inmediatamente superior multiplicado por el factor $\frac{a_{i+1}}{b_{i}}$ (algoritmo \ref{alg:gauss-tridiagonal}).
+
+\begin{algorithm}[H]
+\caption{Eliminación Gaussiana para matrices tridiagonales}\label{alg:gauss-tridiagonal}
+\begin{algorithmic}
+\Require{$a, b, c, d$} 
+\Ensure{$a, b, c, d$} 
+\For{$i \gets 1$ to $n-1$}     
+    \If{$b_{i} = 0$ } \Comment{Se detectó un elemento nulo en la diagonal}
+        \State \textbf{exception:} $"$EG no aplicable$"$ 
+    \Else
+        \State $m \gets \frac{a_{i+1}}{b_{i}}$
+        \State $b_{i+1} \gets b_{i+1} - m * c_{i}$
+        \State $d_{i+1} \gets d_{i+1} - m * d_{i}$
+        \State $a_{i+1} \gets 0$
+    \EndIf
+\EndFor
+\end{algorithmic}
+\end{algorithm}
+
+Antes de aplicar cada paso se analiza la presencia de elementos nulos en la diagonal (vector $b$).
+
+Finalmente, como resultado de escalonar una matriz tridiagonal, se obtiene una matriz que sólo contiene elementos no nulos en la diagonal principal (vector $b$) y en su diagonal inmediatamente superior (vector $c$). Esto también puede aprovecharse para reducir la cantidad de operaciones que requiere la sustitución hacia atrás.
+
+Dado que los únicos coeficientes no nulos se hallan en los vectores $b$ y $c$ resultantes del algoritmo anterior, en el despeje de la $i$-ésima fila de la matriz escalonada sólo intervienen dos variables: $x_{i}$ (la variable a despejar) y $x_{i+1}$ (la variable despejada en el paso anterior); en el caso $i = n$, sólo resta despejar $x_{n}$. En el despeje también interviene el término independiente almacenado en el vector $d$ (algoritmo \ref{alg:gauss-tridiagonal-sustitucion}).
+
+Para ciertas aplicaciones, resulta útil resolver el mismo sistema tridiagonal pero variando los términos independientes de las ecuaciones (vector $d$). En esos casos puede aplicarse un pre-cómputo sobre la matriz tridiagonal que permita luego transformar el vector de términos independientes sin necesidad de volver a escalonar la matriz original, para finalmente ejecutar la sustitución hacia atrás. 
+
+\begin{algorithm}[H]
+\caption{Sustitución hacia atrás}\label{alg:gauss-tridiagonal-sustitucion}
+\begin{algorithmic}
+\Require{$b, c, d$} 
+\Ensure{$x$}   \Comment{$x$ es el vector solución del sistema}
+\State $x \gets (0, \hdots, 0)$
+\For{$i \gets n$ to $1$}     
+    \If{$i = n$ }
+        \If{$b_{i} = 0$ }
+            \If{$d_{i} = 0$}
+                \State \textbf{exception:} $"$El sistema tiene infinitas soluciones$"$
+            \Else \State \textbf{exception:} $"$El sistema no tiene solución$"$
+            \EndIf
+        \Else \State $x_{i} \gets \frac{d_{i}}{b_{i}} $
+        \EndIf
+    \Else
+        \State $x_{i} \gets \frac{d_{i} - x_{i+1} * c_{i}}{b_{i}} $ \Comment{$b_{i} \neq 0$ pues EG tuvo que haber finalizado}
+    \EndIf
+\EndFor
+\end{algorithmic}
+\end{algorithm}
+
+\begin{algorithm}[H]
+\caption{Eliminación Gaussiana para matrices tridiagonales con pre-cómputo}\label{alg:gauss-tridiagonal-con-precomputo}
+\begin{algorithmic}
+\Require{$a, b, c$} 
+\Ensure{$a, b, c, d^{pre}$}   \Comment{$d^{pre}$ contiene el pre-cómputo a aplicar sobre $d$}
+\State $d^{pre} \gets (0, \hdots, 0)$
+\For{$i \gets 1$ to $n-1$}     
+    \If{$b_{i} = 0$} \Comment{Se detectó un elemento nulo en la diagonal}
+        \State \textbf{exception:} $"$EG no aplicable$"$ 
+    \Else
+        \State $m \gets \frac{a_{i+1}}{b_{i}}$
+        \State $b_{i+1} \gets b_{i+1} - m * c_{i}$
+        \State $d^{pre}_{i+1} \gets m$
+        \State $a_{i+1} \gets 0$
+    \EndIf
+
+\EndFor
+\end{algorithmic}
+\end{algorithm}
+
+El algoritmo \ref{alg:gauss-tridiagonal-con-precomputo} es una adaptación del algoritmo de Eliminación Gaussiana para matrices tridiagonales, que en cada paso $i$ almacena el coeficiente $m$ necesario para transformar el término $d_{i}$ de los posibles vectores $d$. El algoritmo \ref{alg:gauss-tridiagonal-precomputo-d} muestra cómo, dado un vector $d$ de términos independientes, se obtiene el resultado de aplicarle a dicho vector los pasos de Eliminación Gaussiana pre-computados. Por último, basta aplicar sustitución hacia atrás (algoritmo \ref{alg:gauss-tridiagonal-sustitucion}) sobre los vectores $b$ y $c$ calculados por el algoritmo \ref{alg:gauss-tridiagonal-con-precomputo} y el vector $d$ obtenido mediante al algoritmo \ref{alg:gauss-tridiagonal-precomputo-d}.
+
+\begin{algorithm}[H]
+\caption{Aplicación de pre-cómputo sobre un vector $d$}\label{alg:gauss-tridiagonal-precomputo-d}
+\begin{algorithmic}
+\Require{$d^{pre}, d$} 
+\Ensure{$d$} 
+\For{$i \gets 1$ to $n$}     
+    \If{$i = 1$ }
+        \State \textbf{pass} \Comment{Se conserva el elemento $d_{1}$}
+    \Else
+        \State $d_{i} \gets d_{i} - (d^{pre}_{i} * d_{i-1}) $
+    \EndIf
+\EndFor
+\end{algorithmic}
+\end{algorithm}
+
+Mientras que el algoritmo de Eliminación Gaussiana tradicional requiere una cantidad de operaciones del orden de $\mathcal{O}(n^{3})$ \cite{burden-gauss}, la posibilidad de aprovechar las características de las matrices tridiagonales reduce la cantidad de operaciones requeridas al orden de $\mathcal{O}(n)$, lo cual se hace evidente por el hecho de que cada uno de los pasos de la versión para este tipo de matrices (con y sin pre-cálculo) consiste en un ciclo $for$ que recorre los vectores $a$, $b$, $c$ y $d$ de tamaño $n$.

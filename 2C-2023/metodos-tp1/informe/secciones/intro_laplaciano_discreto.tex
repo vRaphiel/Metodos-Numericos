@@ -1,0 +1,34 @@
+Un caso de aplicación de sistemas tridiagonales a procesamiento de grafos e imágenes es el cálculo del operador de Laplace o Laplaciano en su versión discreta. Para el caso unidimensional la operación está dada por:
+
+\begin{equation} \label{eq:laplaciano}
+	u_{i-1} - 2u_{i} + u_{i+1} = d_{i}
+\end{equation}
+
+siendo $u_{-1} = u_{n} = 0$. El sistema en forma matricial tiene la forma:
+
+\[
+\begin{bmatrix}
+-2 & 1 &  &  & 0 \\
+1 & -2 & 1 &  &  \\
+ & 1 & -2 & \ddots &  \\
+ &  & \ddots & \ddots & 1 \\
+0 &  &  & 1 & -2 \\
+\end{bmatrix} 
+\begin{bmatrix}
+u_{1} \\
+u_{2} \\
+u_{3} \\
+\vdots \\
+u_{n} \\
+\end{bmatrix}
+=
+\begin{bmatrix}
+d_{1} \\
+d_{2} \\
+d_{3} \\
+\vdots \\
+d_{n} \\
+\end{bmatrix}
+\]
+
+Aprovechando el sistema matricial tridiagonal asociado al problema, puede aprovecharse la adaptación de Eliminación Gaussiana para sistemas tridiagonales para hallar el vector $u$ asociado a cada vector $d$.

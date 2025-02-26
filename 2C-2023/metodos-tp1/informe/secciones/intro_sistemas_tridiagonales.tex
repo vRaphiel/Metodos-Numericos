@@ -1,0 +1,33 @@
+Un tipo particular de matrices ralas, cuyos elementos son mayormente nulos, son las llamadas tridiagonales. Estas contienen elementos nulos por fuera de la diagonal principal y las diagonales adyacentes por encima y por debajo de la principal. Un sistema de ecuaciones tridiagonal y su matriz asociada tienen la forma:
+
+\begin{equation} \label{eq:tridiagonal}
+	a_{i} x_{i-1} + b_{i} x_{i} + c_{i} x_{i+1} = d_{i}
+\end{equation}
+
+
+\[
+\begin{bmatrix}
+b_{1} & c_{1} &  &  & 0 \\
+a_{2} & b_{2} & c_{2} &  &  \\
+ & a_{3} & b_{3} & \ddots &  \\
+ &  & \ddots & \ddots & c_{n-1} \\
+0 &  &  & a_{n} & b_{n} \\
+\end{bmatrix}
+\begin{bmatrix}
+x_{1} \\
+x_{2} \\
+x_{3} \\
+\vdots \\
+x_{n} \\
+\end{bmatrix}
+=
+\begin{bmatrix}
+d_{1} \\
+d_{2} \\
+d_{3} \\
+\vdots \\
+d_{n} \\
+\end{bmatrix}
+\]
+
+En estos casos, el sistema puede representarse mediante sólo 4 vectores $a$, $b$, $c$ y $d$ de largo $n$ (siendo nulos $a_{1}$ y $c_{n}$). Aprovechando esto, puede desarrollarse una versión del algoritmo de Eliminación Gaussiana que omite las operaciones triviales correspondientes a la gran cantidad de elementos nulos de la matriz y reduce la complejidad computacional al orden $\mathcal{O}(n)$. Para los casos en que se opere múltiples veces con la misma matriz $A$ para diferentes vectores $d$, también se puede hacer un pre-cómputo de la Eliminación Gaussiana de $A$ por única vez para luego aplicarlo sobre los vectores $d$, reduciendo aún más la cantidad total de operaciones a realizar.

@@ -1,0 +1,74 @@
+Dada una matriz $A \in \mathbb{R}^{n \times n}$ y un vector de términos independientes $b \in \mathbb{R}^{n}$, el algoritmo de eliminación gaussiana consta de dos etapas.
+
+\subsubsection*{Diagonalización}
+
+La primera etapa consiste en recorrer las filas de arriba hacia abajo. Para cada fila $i$ se utiliza el elemento $a_{ii}$ como pivot. A continuación, se busca llevar a 0 a todos los elementos $a_{ji}$ con $i < j \leq n$. Para esto se le resta a cada fila $j$ un múltiplo de la fila $i$, es decir que para cada $k$, $1 \leq k \leq n$, se hace la asignación $a_{jk} = a_{jk} - \frac{a_{ji}}{a_{ii}} * a_{ik}$. De esta manera, al elemento $a_{ji}$ se le asigna $a_{ji} - \frac{a_{ji}}{a_{ii}} * a_{ii} = a_{ji} - a_{ji} = 0$. De forma simultanea, se aplica la misma operación en el vector independiente $b$, haciendo la asignación $b_{j} = b_{j} - \frac{a_{ji}}{a_{ii}} * b_{i}$. Esto preserva la equivalencia entre el sistema de ecuaciones original y el resultante del proceso de diagonalización.
+
+El invariante de esta etapa del algoritmo es entonces que, después del $i$-esimo paso, todas las filas $k$ con $i < k \leq n$ tendrán el elemento $a_{ki} = 0$. Una vez finalizada la etapa de diagonalización tendremos una matriz triangular superior y un vector de términos independientes equivalentes al sistema de ecuaciones original.
+
+
+\begin{algorithm}
+    \caption{Diagonalización}\label{alg:diagonalize}
+    \begin{algorithmic}
+        \Require{$A, b, i$}
+        \Ensure{$A, b$}
+        \If{$A_{ii} = 0$}
+        \State \textbf{exception:} $"$EG no aplicable$"$
+        \EndIf
+        \For{$j \gets i + 1$ to $n$}
+        \If{$A_{ji} \neq 0$}
+        \State $escalar \gets \frac{A_{ji}}{A_{ii}}$
+        \State $b_{j} \gets b_{j} - escalar * b_{i}$
+        \For{$k \gets 1$ to $n$}
+        \State $A_{jk} \gets A_{jk} - (A_{ik} * escalar)$
+        \EndFor
+        \EndIf
+        \EndFor
+    \end{algorithmic}
+\end{algorithm}
+
+
+\subsubsection*{Sustitución hacia atrás}
+
+Llamemos $A^{1} \in \mathbb{R}^{n \times n}$ a la matriz triangular superior y $b^{1} \in \mathbb{R}^{n}$ al vector de términos independientes resultantes del paso de diagonalización.
+
+La ultima fila de la matriz representa la ecuación $a^{1}_{nn} * x_{n} = b^{1}_{n}$, ya que el resto de los elementos de la fila son $0$. Esta ecuación tiene una única solución $x_{n} = \frac{b^{1}_{n}}{a^{1}_{nn}}$. El método de sustitución hacia atrás consiste en tomar el valor para $x_{n}$ mencionado, y utilizarlo para despejar $x_{n-1}$ en la ecuación de la fila $n - 1$. La ecuación despejada queda entonces $x_{n - 1} = \frac{b^{1}_{n - 1} - (b^{1}_{n} * x_{n})}{a^{1}_{n-1n-1}}$.
+
+Este proceso se repite para todas las ecuaciones restantes, sustituyendo las soluciones obtenidas hasta el momento y despejando la $i$-esima incognita.
+
+\begin{algorithm}
+    \caption{Sustitución hacia atrás}\label{alg:backwards-substitution}
+    \begin{algorithmic}
+        \Require{$A, b$}
+        \Ensure{$x$}
+        \For{$i \gets n$ to $1$}
+        \State $sum \gets 0$
+        \For{$j \gets i + 1$ to $n$}
+        \State $sum \gets sum + A_{ij} * x_{j}$
+        \EndFor
+        \If{$A_{ii} \neq 0$}
+        \State $x_{i} \gets \frac{(b_{i} - sum)}{A_{ii}}$
+        \Else
+        \State $x_{i} \gets 0$ \Comment{En este caso el sistema tiene infinitas soluciones}
+        \EndIf
+        \EndFor
+    \end{algorithmic}
+\end{algorithm}
+
+\subsubsection*{Algoritmo completo}
+
+Una vez definidos los algoritmos para diagonalización(\ref{alg:diagonalize}) y sustitución hacia atrás (\ref{alg:backwards-substitution}), el algoritmo completo de eliminación gaussiana consiste en realizar el paso de diagonalización para cada una de las filas, y luego llamar al algoritmo de sustitución para la matriz $A^{1}$ y el vector $b^{1}$ modificados.
+
+\begin{algorithm}
+    \caption{Eliminación gaussiana}\label{alg:gauss}
+    \begin{algorithmic}
+        \Require{$A, b$}
+        \Ensure{$x$}
+        \For{$i \gets 1$ to $n$}
+        \State $A, b \gets Diagonalizacion(A, b, i)$ \Comment{Algoritmo \ref{alg:diagonalize}}
+        \EndFor
+        \State $x \gets Sustitucion(A,b)$ \Comment{Algoritmo \ref{alg:backwards-substitution}}
+    \end{algorithmic}
+\end{algorithm}
+
+Este algoritmo tiene complejidad temporal de $O(n^{3})$. Para cada una de las $n$ filas se diagonalizan todas las filas inferiores, por lo que se incurren $O(n^{2})$ operaciones entre filas. Cada operación entre filas es del orden $O(n)$, pues se realizan operaciones aritméticas sobre todas sus $n$ columnas.

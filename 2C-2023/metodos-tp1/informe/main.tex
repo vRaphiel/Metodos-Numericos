@@ -1,0 +1,115 @@
+\documentclass[10pt,a4paper]{article}
+\usepackage[utf8]{inputenc} % para poder usar tildes en archivos UTF-8
+\usepackage[spanish]{babel} % para que comandos como \today den el resultado en castellano
+\usepackage{a4wide} % márgenes un poco más anchos que lo usual
+\usepackage{caratula}
+% \usepackage[left=3cm,right=3cm,bottom=3cm,top=3cm]{geometry}
+
+% Comandos para formato
+\usepackage[table,xcdraw]{xcolor}
+\usepackage{hyperref}
+
+% Comandos para simbolos matematicos.
+\usepackage{amsmath, amssymb, tabularx}
+
+% Comandos para referencias
+\usepackage{natbib}
+
+% Comandos para Figuras, Graficos, Tikz etc.
+\usepackage{tikz}
+\usepackage{epsfig}
+%\usepackage{pgfplots}
+\usepackage{graphicx}
+\usepackage{epsfig}
+\usepackage{caption}
+\usepackage{subcaption}
+\usepackage{svg}
+
+% Comandos para teoremas etc.
+\usepackage{amsthm}
+\newtheorem{theorem}{Teorema}
+\newtheorem{lemma}[theorem]{Lema}
+\newtheorem{proposition}[theorem]{Proposición}
+\newtheorem{remark}{Observación}
+\newtheorem{corollary}{Corolario}
+% \newproof{proof}{Demostración}
+
+% Comandos para algoritmos.
+\usepackage[noend]{algpseudocode}
+\usepackage{algorithm}
+\algnewcommand{\IfThenElse}[3]{% \IfThenElse{<if>}{<then>}{<else>}
+\State \algorithmicif\ #1\ \algorithmicthen\ #2\ \algorithmicelse\ #3}
+\algnewcommand{\IfThen}[2]{% \IfThenElse{<if>}{<then>}
+\State \algorithmicif\ #1\ \algorithmicthen\ #2}
+\renewcommand{\algorithmicrequire}{\textbf{Input:}}
+\renewcommand{\algorithmicensure}{\textbf{Output:}}
+
+\begin{document}
+
+\titulo{TP 1: Eliminación Gaussiana, \\ Matrices Tridiagonales y Difusión}
+\materia{Métodos Numéricos}
+
+\integrante{Asmad, Victor}{760/19}{vasmad@dc.uba.ar}
+\integrante{Lopez Luque, Matías}{192/14}{matimatote@gmail.com}
+\integrante{Romano, Germán}{786/11}{romano.german17@gmail.com}
+
+\maketitle
+
+\newpage
+
+\tableofcontents
+
+\newpage
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Resumen} \label{sec:Resumen} \input{secciones/resumen}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Introducción} \label{sec:Intro}
+
+\subsection{Sistemas de ecuaciones} \label{intro_sistemas_ecuaciones}
+\input{secciones/intro_sistemas_ecuaciones}
+
+\subsection{Sistemas tridiagonales} \label{intro_sistemas_tridiagonales}
+\input{secciones/intro_sistemas_tridiagonales}
+
+\subsection{Laplaciano discreto} \label{intro_laplaciano_discreto}
+\input{secciones/intro_laplaciano_discreto}
+
+\subsection{Difusión} \label{intro_difusion}
+\input{secciones/intro_difusion}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Desarrollo} \label{sec:Desarrollo}
+
+\subsection{Eliminación Gaussiana sin pivoteo} \label{desarrollo_gauss_sin_pivoteo}
+\input{secciones/desarrollo_gauss_sin_pivoteo}
+
+\subsection{Eliminación Gaussiana con pivoteo} \label{desarrollo_gauss_con_pivoteo}
+\input{secciones/desarrollo_gauss_con_pivoteo}
+
+\subsection{Eliminación Gaussiana para un sistema tridiagonal} \label{desarrollo_gauss_tridiagonal}
+\input{secciones/desarrollo-gauss-tridiagonal}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Resultados y discusión} \label{sec:Resultados}
+
+\subsection{Tiempos de ejecución} \label{resultados_tiempos_de_ejecucion}
+\input{secciones/resultados_tiempos_de_ejecucion}
+
+\subsection{Matriz Laplaciana} \label{resultados_matriz_laplaciana}
+\input{secciones/resultados_matriz_laplaciana}
+
+\subsection{Difusión} \label{resultados_difusion}
+\input{secciones/resultados_difusion}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Conclusiones} \label{sec:Conclusiones}
+\input{secciones/conclusiones}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\bibliographystyle{plain}
+\bibliography{refs}
+
+\end{document}
+
+

@@ -1,0 +1,37 @@
+Como se menciona en \ref{intro_sistemas_ecuaciones}, el algoritmo de eliminación gaussiana explicitado en la sección \ref{desarrollo_gauss_sin_pivoteo} tiene dos problemas. En el paso de diagonalización(\ref{alg:diagonalize}) se define un escalar de la forma $\frac{A_{ji}}{A_{ii}}$ para $1 \leq i \leq n$ y $i < j \leq n$. Si el elemento $a_{ii}$ de la matriz $A$ es $0$, el algoritmo no puede resolver el sistema de ecuaciones.
+
+Otro problema que surge es que si en algún elemento de la diagonal $a_{ii}$ se presenta un valor cercano a $0$, entonces el escalar $\frac{a_{ji}}{a_{ii}}$ tiene el potencial de introducir error numérico a los resultados. Esto se debe a que el resultado de dividir por un valor cercano a $0$ es potencialmente un numero muy elevado, y estos números están más esparcidos en las representaciones de punto flotante.
+
+\smallbreak
+
+Ambos problemas pueden mitigarse modificando el algoritmo de eliminación gaussiana para realizar pivoteo parcial. El pivoteo consiste en, en el paso $i$, $1 \leq i \leq n$, en vez de utilizar el elemento $a_{ii}$ como pivot, permutar la fila $i$ por la fila $j$, con $i < j \leq n$, donde el valor de $a_{ji}$ es el mayor valor de la columna $i$ para las filas entre $i$ y $n$. Los mismos indices deben permutarse en el vector de términos independientes.
+
+\smallbreak
+
+Si ningún valor en la columna $i$ es distinto a $0$, esto significa que $a_{ji} = 0$ para todo $i \leq j \leq n$, es decir que el paso $i$ de diagonalización puede saltearse. El problema de error numérico solo puede mitigarse, ya que dividir por el mayor valor posible genera una menor magnitud de error, pero no puede garantizarse operaciones sin error numérico.
+
+\begin{algorithm}
+    \caption{Eliminacion gaussiana con pivoteo}\label{alg:gauss-pivot}
+    \begin{algorithmic}
+        \Require{$A, b$}
+        \Ensure{$x$}
+        \For{$i \gets 1$ to $n$}
+        \State $pivot \gets i$
+        \For{$j \gets i + 1$ to $n$}
+        \If{$A_{ji} > A_{ii}$}
+        \State $pivot \gets j$
+        \EndIf
+        \EndFor
+        \If{$j \neq i$}
+        \State $temp \gets A_{i}$ \Comment{Operacion sobre toda la fila $i$}
+        \State $A_{i} \gets A_{j}$
+        \State $A_{j} \gets temp$
+        \State $temp \gets b_{i}$
+        \State $b_{i} \gets b_{j}$
+        \State $b_{j} \gets temp$
+        \EndIf
+        \State $A, b \gets Diagonalizacion(A, b, i)$ \Comment{Algoritmo \ref{alg:diagonalize}}
+        \EndFor
+        \State $x \gets Sustitucion(A,b)$ \Comment{Algoritmo \ref{alg:backwards-substitution}}
+    \end{algorithmic}
+\end{algorithm}

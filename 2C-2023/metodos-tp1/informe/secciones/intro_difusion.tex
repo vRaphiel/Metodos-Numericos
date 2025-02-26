@@ -1,0 +1,14 @@
+Este tipo de sistemas de ecuaciones también encuentra aplicación en el modelado de procesos estocásticos de difusión, donde una entidad se difunde típicamente
+desde un lugar de mayor concentración hacia uno de menos. Es posible estudiar la evolución promedio de una densidad de partículas inicial resolviendo la ecuación de difusión de forma discreta
+mediante Eliminación Gaussiana para sistemas tridiagonales \cite{langtangen-difusion}.
+
+A partir de un vector inicial $u^{(0)}$ con magnitudes positivas, para cada punto discreto $i$, $u_{i}$ se atenuará y se dispersará hacia $u_{i-1}$ y $u_{i+1}$. En pos de mantener constante la suma total (es decir, la magnitud), la operación a utilizar deberá mantener iguales los ritmos de dispersión y atenuación. El operador laplaciano garantiza la conservación puesto que la suma de sus coeficientes es $1 - 2 + 1 = 0$. Considerando el incremento para el paso $k$ como una
+fracción $\alpha$ del operador laplaciano de $u_{k}$, la ecuación resultante tiene la forma
+
+\begin{equation} \label{eq:difusion}
+	u_{i}^{(k)} - u_{i}^{(k-1)} = \alpha (u_{i-1}^{(k)} - 2 u_{i}^{(k)} + u_{i+1}^{(k)})
+\end{equation}
+
+En forma matricial, el sistema se puede expresar como $A u^{(k)} = u^{(k-1)}$. Resolviendo el sistema de forma iterativa, se obtiene la
+evolución del vector u para $k = \{1, 2, 3, ..., m\}$. El resultado obtenido equivale a simular infinitas trayectorias individuales y analizar cómo se
+distribuyen en promedio.

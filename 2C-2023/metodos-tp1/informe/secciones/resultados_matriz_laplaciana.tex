@@ -1,0 +1,20 @@
+La segunda parte del análisis consiste en interpretar los resultados de la ejecución del cálculo de la matriz Laplaciana. Se sabe que, aplicado a un vector, este opera como la derivada segunda del mismo.
+Es por tal motivo que resulta de interés ver si, mediante un sistema de ecuaciones lineales, se puede encontrar la función que represente a la ecuación $ (d^{2}/dx^{2})u = d $.
+Por tal motivo, se definirán distintos $d$ que nos permitan encontrar la función
+$$  d_{i} = \begin{cases}
+      0 \\
+      4/n \ \textit{si} \ i =  \lfloor n/2 \rfloor + 1
+   \end{cases}
+$$
+$$ d_{i} = 4/n^{2} $$
+$$ d_{i} = (-1 + 2i/(n - 1))12/n^{2}$$
+
+Se utilizará un valor de $n = 101$ y se procederá a realizar un gráfico de los resultados con el objetivo de ver las funciones que pueden representar.
+El resultado se observa en la figura \ref{fig:difusion}.
+
+\begin{figure}[H]
+   \centering
+   \includesvg[scale=0.5]{graficos/laplaciana.svg}
+   \caption{Derivada segunda de los u para distintos d}
+   \label{fig:difusion}
+\end{figure}
